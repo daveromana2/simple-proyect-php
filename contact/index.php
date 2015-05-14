@@ -1,4 +1,7 @@
 <?php
+
+require_once("../inc/config.php");
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = trim($_POST["name"]);
     $email = trim($_POST["email"]);
@@ -21,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error_message = "Your form submission has an error.";
     }
 
-    require_once("inc/phpmailer/class.phpmailer.php");
+    require_once(ROOT_PATH . "inc/phpmailer/class.phpmailer.php");
     $mail = new PHPMailer();
 
     if (!isset($error_message) && !$mail->ValidateAddress($email)) {
@@ -41,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $mail->MsgHTML($email_body);
 
         if ($mail->Send()) {
-            header("Location: contact.php?status=thanks");
+            header("Location: ". BASE_URL ."contact/?status=thanks");
             exit;
         } else {
             $error_message = "There was a problem sending the email: " . $mail->ErrorInfo;
@@ -51,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?><?php
 $pageTitle = "Contact Mike";
 $section = "contact";
-include('inc/header.php');
+include(ROOT_PATH . 'inc/header.php');
 ?>
 
 <div class="section page">
@@ -74,7 +77,7 @@ include('inc/header.php');
             }
             ?>
 
-            <form method="post" action="contact.php">
+            <form method="post" action="<?php echo BASE_URL;?>contact/">
 
                 <table>
                     <tr>
@@ -82,7 +85,7 @@ include('inc/header.php');
                             <label for="name">Name</label>
                         </th>
                         <td>
-                            <input type="text" name="name" id="name" value="<?php if(isset($name)){ echo $name;} else{ echo "";};?>">
+                            <input type="text" name="name" id="name" value="<?php if(isset($name)){ echo htmlspecialchars($name);} else{ echo "";};?>">
                         </td>
                     </tr>
                     <tr>
@@ -90,7 +93,7 @@ include('inc/header.php');
                             <label for="email">Email</label>
                         </th>
                         <td>
-                            <input type="text" name="email" id="email" value="<?php if(isset($email)){ echo $email;} else{ echo "";};?>">
+                            <input type="text" name="email" id="email" value="<?php if(isset($email)){ echo htmlspecialchars($email);} else{ echo "";};?>">
                         </td>
                     </tr>
                     <tr>
@@ -98,7 +101,7 @@ include('inc/header.php');
                             <label for="message">Message</label>
                         </th>
                         <td>
-                            <textarea name="message" id="message"><?php if(isset($message)){ echo $message;} else{ echo "";}?></textarea>
+                            <textarea name="message" id="message"><?php if(isset($message)){ echo htmlspecialchars($message);} else{ echo "";}?></textarea>
                         </td>
                     </tr> 
                     <tr style="display: none;">
@@ -106,7 +109,7 @@ include('inc/header.php');
                             <label for="address">Address</label>
                         </th>
                         <td>
-                            <input type="text" name="address" id="address" <?php if(isset($address)){ echo $address;} else{ echo "";}?>>
+                            <input type="text" name="address" id="address" <?php if(isset($address)){ echo htmlspecialchars($address);} else{ echo "";}?>>
                             <p>Humans (and frogs): please leave this field blank.</p>
                         </td>
                     </tr>                   
@@ -121,4 +124,4 @@ include('inc/header.php');
 
 </div>
 
-<?php include('inc/footer.php') ?>
+<?php include(ROOT_PATH . 'inc/footer.php') ?>
