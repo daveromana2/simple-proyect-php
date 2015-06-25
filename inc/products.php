@@ -30,6 +30,36 @@ function get_products_recent() {
     return $recent;
 }
 
+function get_products_search($search_term) {
+    $results = array();
+    $all = get_products_all();
+    
+    foreach ($all as $product) {
+        if (stripos($product["name"], $search_term) !== false) {
+            $results[] = $product;
+        }
+    }
+    return $results;
+}
+
+function get_products_count() {
+    return count(get_products_all());
+}
+
+function get_products_subset($positionStar, $positionEnd) {
+    $subset = array();
+    $all = get_products_all();
+    
+    $position = 0;
+    foreach ($all as $product) {
+        $position += 1;
+        if ($position >= $positionStar && $position <= $positionEnd) {
+            $subset[] = $product;
+        }
+    }
+    return $subset;
+}
+
 function get_products_all() {
 
     $products = array();
